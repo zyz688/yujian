@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>预见科技</title>
+  <script src="layui/layui.js"></script>
+  <link rel="stylesheet" href="layui/css/layui.css">
+  </head>
+<body>
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">预见科技</div>
+
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <label style="color: red" th:text="${loginUser}" ></label>
+      </li>
+      <li class="layui-nav-item"><a th:href="@{/loginOut}">退出</a></li>
+    </ul>
+  </div>
+
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree" lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">财务管理</a>
+          <dl class="layui-nav-child">
+            <dd><a th:href="@{allSupply}"
+                   class="site-demo-active" >供货商往来账务</a></dd>
+            <dd><a class="site-demo-active" data-type="tabAdd">客户往来账务</a></dd>
+            <dd><a class="site-demo-active" data-type="tabAdd">其他</a></dd>
+          </dl>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+
+
+  <!--tab标签 右侧区域-->
+  <div class="layui-tab" lay-filter="demo" lay-allowclose="true" style="margin-left: 200px;">
+
+
+    <div class="layui-tab-content">
+
+    </div>
+
+    <table id="demo" lay-filter="test"></table>
+    <button  id="addSupply"  type="button" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-fluid">添加数据</button>
+  </div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  layui.use(['element', 'layer', 'jquery','table'], function () {
+      var  table=  layui.table;
+      var  $ = layui.$;
+      var layer =layui.layer;
+
+      //给当前行绑定事件
+     table.on('tool(test)',function (obj){
+
+       if (obj.event=='del'){
+         layer.confirm("确定删除吗？",{icon: 1, title:'提示'},function (index){
+           obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+           layer.close(index);
+
+           //删除操作
+           $.getJSON("http://localhost:8888/deleteSupply",{id:obj.data.id},function (d){
+
+
+           })
+
+         })
+
+       }else  if (obj.event=='edit'){
+         //更新操作
+
+
+       }
+
+
+     })
+
+
+
+
+        //给添加供货商数据按钮绑定事件
+      $("#addSupply").click(function (){
+        layer.open({
+          type:2,
+          title:"添加供货商数据",
+          content:"http://localhost:8888/supplyfrom",
+          area: ['1000px', '800px'],
+          closeBtn:2,
+        });
+
+
+      })
+
+      table.render({
+          elem:"#demo",
+          url:"http://localhost:8888/allSupply",
+          page:true,
+          limit:10,
+          limits:[10,20,30,40,50],
+          cols:[
+                  [
+                    {field:'time',
+                      title:'日期',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'type',
+                      title:'类别',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'id',
+                      title:'单号',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'itemType',
+                      title:'物料类型',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'payAmount',
+                      title:'支付金额(元)',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'procurement',
+                      title:'采购金额(元)',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'balance',
+                      title:'欠款(元)',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'invoiceAmount',
+                      title:'开票金额(元)',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'total',
+                      title:'总计(元)',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {field:'notes',
+                      title:'备注',
+                      Width:80,
+                      height:80,
+                      sort:true,
+
+                    },
+                    {
+                      title:'操作',
+                      align:'center',
+                      templet:function (){
+
+                        var str ="<button type=\"button\" class=\"layui-btn  layui-btn-sm layui-btn-danger \" lay-event='del'>删除</button>";
+                         str +="<button type=\"button\" class=\"layui-btn  layui-btn-sm \" lay-event='edit'>编辑</button>";
+                        return  str;
+
+                      }
+                    },
+
+                  ]
+          ]
+
+      })
+    var element = layui.element;
+
+  });
+
+
+</script>
+
+</body>
+</html>

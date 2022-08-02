@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form class="layui-form" th:action="@{/addSupply}" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">日期</label>
+        <div class="layui-input-block">
+            <input   id="hireDate"  type="text" name="time" required  lay-verify="required" placeholder="年-月-日" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类别</label>
+        <div class="layui-input-block">
+            <select name="type" lay-verify="required">
+                <option value=""></option>
+                <option value="0">入仓</option>
+                <option value="1">发票</option>
+                <option value="2">开仓</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">单号</label>
+        <div class="layui-input-block">
+            <input type="text" name="id" required  lay-verify="required" placeholder="请输入单号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">物料</label>
+        <div class="layui-input-block">
+            <input type="text" name="itemType" required  lay-verify="required" placeholder="请输入物料" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="payAmount" required  lay-verify="required" placeholder="请输入支付金额" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">采购金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="procurement" required  lay-verify="required" placeholder="请输入采购金额" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">欠款</label>
+        <div class="layui-input-block">
+            <input type="text" name="balance" required  lay-verify="required" placeholder="请输入欠款" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开票金额</label>
+        <div class="layui-input-block">
+            <input type="text" name="invoiceAmount" required  lay-verify="required" placeholder="请输入开票金额" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">总数</label>
+        <div class="layui-input-block">
+            <input type="text" name="total" required  lay-verify="required" placeholder="请输入总数" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <input type="text" name="notes" required  lay-verify="required" placeholder="请输入备注" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">点击添加</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</div>
+
+<script>
+    //Demo
+    layui.use(['form','laydate'], function(){
+        //绑定日期模块
+        var  laydate=layui.laydate;
+        laydate.render({
+            elem: '#hireDate',
+            trigger:'click'
+
+        })
+        var from =layui.from;
+
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <script src="../static/layui/layui.js"></script>
+
+    <style>
+
+    .div{
+
+        position: absolute;
+        left: 200px;
+        top: 50px;
+
+
+
+
+    }
+
+ </style>
+
+
+
+</head>
+<body style="  background-image: linear-gradient(to right, #fbc2eb, #a6c1ee) ">
+
+
+<ul class="layui-nav" lay-filter="" style="background-image: linear-gradient(to right, #fbc2eb, #a6c1ee)">
+    <li class="layui-nav-item"><a href="">最新活动</a></li>
+    <li class="layui-nav-item layui-this"><a href="">产品</a></li>
+    <li class="layui-nav-item"><a href="">大数据</a></li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child"> <!-- 二级菜单 -->
+            <dd><a href="">移动模块</a></dd>
+            <dd><a href="">后台模版</a></dd>
+            <dd><a href="">电商平台</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item"><a href="">社区</a></li>
+</ul>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //…
+    });
+</script>
+<ul class="layui-nav layui-nav-tree" lay-filter="test" style="background-image: linear-gradient(to right, #fbc2eb, #a6c1ee)">
+    <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+    <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;">默认展开</a>
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;">选项1</a></dd>
+            <dd><a href="javascript:;">选项2</a></dd>
+            <dd><a href="">跳转</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+            <dd><a href="">移动模块</a></dd>
+            <dd><a href="">后台模版</a></dd>
+            <dd><a href="">电商平台</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item"><a href="">产品</a></li>
+    <li class="layui-nav-item"><a href="">大数据</a></li>
+</ul>
+
+<div class="div" style="text-align: center;" >
+    <div class="layui-inline">
+        <table class="layui-table" lay-size="lg" width="250" height="250" >
+            <colgroup>
+                <col width="200" >
+                <col width="200" >
+                
+            </colgroup>
+            <thead>
+            <tr >
+                <th style="font-size: 35px;text-align:center">昵称</th>
+                <th style="font-size: 35px;text-align:center">加入时间</th>
+                <th style="font-size: 35px; text-align:center">签名</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="font-size: 20px; text-align:center">贤心</td>
+                <td style="font-size: 20px; text-align:center">2016-11-29</td>
+                <td style="font-size: 20px; text-align:center">人生就像是一场修行</td>
+            </tr>
+            <tr>
+                <td style="font-size: 20px; text-align:center">许闲心</td>
+                <td style="font-size: 20px; text-align:center">2016-11-28</td>
+                <td style="font-size: 20px; text-align:center">于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

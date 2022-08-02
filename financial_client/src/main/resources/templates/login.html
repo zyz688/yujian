@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登入界面</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+        }
+        .container {
+            height: 100%;
+            background-image: linear-gradient(to right, #fff, #a6c1ee);
+        }
+        .login-wrapper {
+            background-color: #fff;
+            width: 358px;
+            height: 588px;
+            border-radius: 15px;
+            padding: 0 50px;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .input-item {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 0;
+            padding: 10px;
+            border-bottom: 1px solid rgb(128, 125, 125);
+            font-size: 15px;
+            outline: none;
+        }
+
+        .btn {
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+            margin-top: 40px;
+            background-image: linear-gradient(to right, #a6c1ee, #fff);
+            color: black;
+        }
+        .header {
+            font-size: 38px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 200px;
+        }
+    </style>
+    <script src="layui/layui.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+
+</head>
+<body class="container">
+<div class="login-wrapper">
+    <div class="header">登入账号</div>
+
+    <div >
+        <form method="post" th:action="@{/main}">
+            <label style="color: red" th:text="${msg}"></label>
+        <input type="text" name="name" placeholder="用户名" class="input-item">
+        <input type="password" name="passwd" placeholder="密码" class="input-item">
+        <input type="submit" value="登入" class="btn">
+    </form>
+    </div>
+    <div class="layui-container">
+        <div class="layui-row"  style="height: 30px" > </div>
+        <div class="layui-row" >
+
+            <div class="layui-col-md4 layui-col-md-offset1">
+                <span>还没账号？ </span>
+                <span> 去注册！ </span>
+                <span> </span>
+                <button  id="register" type="button" class="layui-btn layui-btn-primary layui-border-blue">注册</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+  <script>
+
+      layui.use(['layer','jquery'],function (){
+
+      var layer = layui.layer;
+      var  $  = layui.$;
+
+          $("#register").click(function (){
+              layer.open({
+                  type:2,
+                  title:"注册用户",
+                  content:"http://localhost:8888/login/addUser",
+                  area: ['500px', '400px'],
+                  closeBtn:2,
+              });
+
+
+          })
+
+      })
+
+
+
+  </script>
+
+</body>
+</html>

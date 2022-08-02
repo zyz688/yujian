@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.SupplyMapper">
+
+   <select id="allSupply" resultType="com.yujian.financial_client.pojo.Supply">
+
+            select * from financial_client.gonghuo_table limit  #{pa},#{limit}
+
+   </select>
+
+    <delete id="deleteSupply" parameterType="string">
+
+        delete from financial_client.gonghuo_table where  id = #{id}
+
+    </delete>
+    <insert id="addSupply" parameterType="com.yujian.financial_client.pojo.Supply">
+
+
+   insert into financial_client.gonghuo_table(time, type, id, item_type, pay_amount, procurement, balance, invoice_amount, total, notes) values (#{time},#{type},#{id},#{itemType},#{payAmount},#{procurement},#{balance},#{invoiceAmount},#{total},#{notes})
+
+
+
+    </insert>
+    <select id="getDataCount" resultType="int">
+        select count(*) from  financial_client.gonghuo_table
+
+    </select>
+
+
+</mapper>

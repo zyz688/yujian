@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <!--springboot是约定高于配置，约定静态资源的当前路径在static下，所以开始路径为static的下级开始即可-->
+    <script src="layui/layui.js"></script>
+</head>
+<body>
+
+
+<div class="layui-fluid">
+
+
+    <div class="layui-row">
+
+        <ul class="layui-nav" lay-filter="" style="background-image: linear-gradient(to right, #fbc2eb, #a6c1ee)">
+            <li class="layui-nav-item"><a href="">预见</a></li>
+            <li class="layui-nav-item layui-this"><a href="">科技</a></li>
+            <li class="layui-nav-item"><a href="">财务</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">管理</a>
+                <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                    <dd><a href="">移动模块</a></dd>
+                    <dd><a href="">后台模版</a></dd>
+                    <dd><a href="">电商平台</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="https://www.yujian.com/">公司</a></li>
+        </ul>
+        <script>
+            //注意：导航 依赖 element 模块，否则无法进行功能性操作
+            layui.use('element', function(){
+                var element = layui.element;
+
+                //…
+            });
+        </script>
+    </div>
+    <div class="layui-row">
+
+        <div class="layui-col-md2">
+
+
+            <ul class="layui-nav layui-nav-tree" lay-filter="test" style="background-image: linear-gradient(to right, #fbc2eb, #a6c1ee)">
+                <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">账务管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/allSupply}">供货商往来账务</a></dd>
+                        <dd><a href="javascript:;">客户往来账务</a></dd>
+                        <dd><a href="">其他</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+
+        <div class="layui-col-md8 layui-col-md-offset2">
+
+
+
+
+            <table  class="layui-table" lay-size="lg" width="250" height="250">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr >
+                    <th style="font-size:20px;text-align:center">日期</th>
+                    <th style="font-size: 20px;text-align:center">类别</th>
+                    <th style="font-size: 20px; text-align:center">单号</th>
+                    <th style="font-size: 20px; text-align:center">付款金额</th>
+                    <th style="font-size: 20px; text-align:center">采购金额</th>
+                    <th style="font-size: 20px; text-align:center">应付款余额</th>
+                    <th style="font-size: 20px; text-align:center">开票金额</th>
+                    <th style="font-size: 20px; text-align:center">欠发票</th>
+                    <th style="font-size: 20px; text-align:center">账面数据</th>
+                    <th style="font-size: 20px; text-align:center">备注</th>
+                    <th style="font-size: 20px; text-align:center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="suppls,iterStat : ${supplys}" >
+                    <td th:text="${suppls.time}">Onions</td>
+                    <td th:text="${suppls.type}">2.41</td>
+                    <td th:text="${suppls.id}">2.41</td>
+                    <td th:text="${suppls.itemType}">2.41</td>
+                    <td th:text="${suppls.payAmount}">2.41</td>
+                    <td th:text="${suppls.procurement}">2.41</td>
+                    <td th:text="${suppls.balance}">2.41</td>
+                    <td th:text="${suppls.invoiceAmount}">2.41</td>
+                    <td th:text="${suppls.total}">2.41</td>
+                    <td th:text="${suppls.notes}">2.41</td>
+
+                    <td>
+                        <a type="button" class="btn btn-danger btn-xs" th:href="@{/deleteSupply(id=${suppls.id})}">删除</a>
+
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+
+
+</div>
+</body>
+</html>

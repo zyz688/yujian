@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.UserMapper">
+
+
+
+    <select id="getPasswd" resultType="string"  >
+
+        select passwd from financial_client.user where name = #{name}
+
+
+
+    </select>
+    <select id="getUser" resultType="com.yujian.financial_client.pojo.User"  >
+
+        select * from financial_client.user
+    </select>
+
+    <insert id="addUser" parameterType="com.yujian.financial_client.pojo.User">
+
+            insert into financial_client.user (name, passwd) values (#{name},#{passwd})
+
+    </insert>
+
+    <update id="updateUser" parameterType="com.yujian.financial_client.pojo.User">
+
+            update  financial_client.user set passwd=#{passwd} where name=#{name}
+
+
+    </update>
+    <delete id="deleteUser" parameterType="string">
+   delete from financial_client.user where  name=#{name}
+
+
+    </delete>
+    <select id="getOneUser" resultType="com.yujian.financial_client.pojo.User" parameterType="com.yujian.financial_client.pojo.User">
+
+
+        select * from financial_client.user where  name=#{name}
+
+
+
+    </select>
+
+
+</mapper>

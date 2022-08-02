@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="layui/css/layui.css">
+  <script src="layui/layui.js"></script>
+
+
+</head>
+<body>
+
+<script>
+  layui.use(["table"],function(){
+
+    var table = layui.table;
+    table.render({
+      elem:"#demo",
+      url:"http://localhost:8080/test",
+      page: true,
+      cols: [
+          [
+
+        {
+          field: "name" ,
+          title: "用户",
+          sort: true
+
+        },
+        {
+          field: "passwd" ,
+          title: "密码",
+          sort: true
+
+        }
+      ]
+      ]
+    });
+  })
+</script>
+</body>
+</html>
