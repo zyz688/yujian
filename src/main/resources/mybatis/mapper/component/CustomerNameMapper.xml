@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.component.CustomerNameMapper">
+
+    <select id="getAllCustomerName" resultType="com.yujian.financial_client.pojo.component.CustomerName" >
+
+
+        select name,id from  customer_name
+
+    </select>
+
+
+
+    <select id="getCount" resultType="int">
+
+
+
+        select  count(1) from customer_name
+
+    </select>
+
+
+
+    <delete id="deleteCustomerName" parameterType="integer">
+
+
+        delete  from   customer_name where  id=#{id}
+
+    </delete>
+    <insert id="addCustomerName" parameterType="com.yujian.financial_client.pojo.component.CustomerName" >
+
+
+        insert  into   customer_name(name) values (#{name})
+
+
+    </insert>
+
+</mapper>
