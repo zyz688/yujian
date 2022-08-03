@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="icon" href="/favicon.ico">
+  <!--  <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">-->
+  <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<div class="layui-container">
+  <form class="layui-form" method="post"  th:object="${cus}">
+    <div class="layui-form-item">
+      <label class="layui-form-label">销售合同号</label>
+      <div class="layui-input-block">
+        <input type="text"   th:field="*{id}"   required="required"  lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">国家</label>
+      <div class="layui-input-block">
+        <select  th:field="*{country}" autocomplete="off" >
+          <option value=""></option>
+          <option th:each="country:${countryList}" th:value="${country.name}" th:text="${country.name}"></option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">客户名字</label>
+      <div class="layui-input-block">
+        <select  th:field="*{customer}" autocomplete="off" >
+          <option value=""></option>
+          <option th:each="customerName:${customerNameList}" th:value="${customerName.name}" th:text="${customerName.name}"></option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">交易币种</label>
+      <div class="layui-input-block">
+        <select  th:field="*{currency}"   lay-verify="required">
+          <option value=""></option>
+          <option value="人民币￥">人民币￥</option>
+          <option value="美金$">美金$</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">合同</label>
+      <div class="layui-input-block">
+        <input type="text" th:field="*{contract}" required="required"  lay-verify="required" placeholder="请输入合同"  class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">发货金额</label>
+      <div class="layui-input-block">
+        <input type="text" th:field="*{send}" placeholder="请输入发货" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">回款</label>
+      <div class="layui-input-block">
+        <input type="text"  th:field="*{paymentCollection}" required="required"  lay-verify="required" placeholder="请输入回款"  class="layui-input">
+      </div>
+    </div>
+
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">备注</label>
+      <div class="layui-input-block">
+        <input type="text"  th:field="*{notes}"  placeholder="请输入备注"  class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn  layui-btn-normal" lay-submit lay-filter="formDemo">点击更新</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </div>
+    </div>
+  </form>
+</div>
+<script src="../layui/layui.js"></script>
+</body>
+</html>
