@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>预见科技</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <style>
+        .layui-table th{
+            font-size: 15px;
+        }
+
+
+        #form{
+            font-size: 15px;
+
+        }
+    </style>
+</head>
+<body>
+<div class="layui-layout-admin layui-icon-layout">
+
+
+    <div th:replace="~{common/toplayui::top}"></div>
+
+    <div th:replace="~{common/leftlayui::left}"></div>
+
+
+
+
+    <div class="layui-tab" lay-filter="demo" lay-allowclose="true" style="margin-left: 200px;transform:translateY(38px)">
+
+
+        <div class="layui-tab-content">
+            <div class="layui-row">
+
+                <div class="layui-col-md9">
+                    <form id="form" class="layui-form layui-form-pane" >
+                        <div class="layui-inline">
+                            <label class="layui-form-label">销售合同号</label>
+                            <div class="layui-input-inline" style="width: 180px;">
+                                <input type="text"   name="id" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">国家</label>
+                            <div class="layui-input-inline" style="width: 180px;">
+                                <input type="text"   name="country" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">客户</label>
+                            <div class="layui-input-inline" style="width: 180px;">
+                                <input type="text"   name="customer" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button id="search-Customer" type="button" lay-submit lay-filter="search-Customer" class="layui-btn  layui-btn-normal">
+                                <i class="layui-icon layui-icon-search"></i>
+                                搜索</button>
+
+                            <button id="btn-reset" type="reset" class="layui-btn  layui-btn-normal" lay-filter="btn-reset">
+                                <i class="layui-icon layui-icon-refresh"></i>
+                                清空,刷新</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-col-md2 layui-col-md-offset1 ">
+                    <button  id="addCustomer"  type="button" class="layui-btn   layui-btn-normal ">
+                        <i class="layui-icon layui-icon-addition"></i>添加数据</button>
+                </div>
+
+            </div>
+            <table id="table-cus" lay-filter="table-cus"></table>
+
+        </div>
+
+      
+    </div>
+
+</div>
+
+
+    <!--tab标签 右侧区域-->
+
+
+<!--    <div class="layui-footer">-->
+<!--        &lt;!&ndash; 底部固定区域 &ndash;&gt;-->
+<!--    </div>-->
+<script src="layui/layui.js"></script>
+<!--顶部的script-->
+<div th:replace="~{common/toplayui::scrpt}"></div>
+
+<script type="text/javascript" th:inline="javascript">
+
+    var ctxPath = [[@{/}]];
+    layui.use(['element', 'layer', 'jquery','table','util','form'], function () {
+        var  table=  layui.table;
+        var  $ = layui.$;
+        var layer =layui.layer;
+        var form=layui.form;
+        var  util = layui.util;//引入util
+
+
+
+
+
+
+
+
+
+
+        //给清空按钮添加点击事件
+        $('#btn-reset').click(function (){
+            table.reload('table-cus',{
+                url: ctxPath+'allCustomer',
+                where: {
+                    id:'',
+                    country:'',
+                    customer:'',
+
+                },
+                page:{
+                    curr:1
+                },
+            });
+        });
+
+
+        //监听表格上方查询表单提交
+        form.on('submit(search-Customer)',function(data){
+            //刷新表格
+            table.reload('table-cus',{
+                url: ctxPath+'allCustomer',
+                where: { //设定异步数据接口的额外参数，任意设
+                    id:data.field.id,
+                    country :data.field.country,
+                    customer:data.field.customer,
+                }
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            }); //只重载数据
+            return false;//阻止跳转。如果需要表单跳转就去掉
+        })
+
+        //回到顶部
+        util.fixbar({
+            bar1: false,
+            bar2: false
+            , css: { right: 15, bottom: 35}
+            , bgcolor: '##CDC5BF !important;display:block;'
+            , showHeight: 400
+
+        });
+
+
+        //给当前行绑定事件  回调函数形参为当前行内容
+        table.on('tool(table-cus)',function (obj){
+
+            //进行 lay-event 判断是什么操作
+            if (obj.event=='del'){
+                //删除操作
+                layer.confirm('确定删除吗?', {icon:1, title:'提示'}, function(index){
+                    //删除逻辑的实现
+
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    layer.msg("成功删除",{icon:1,time:1000});
+
+                    $.getJSON(ctxPath+"deleteCustomer",{id:obj.data.id},function (){});
+
+                });
+
+
+
+
+
+
+            }else   if (obj.event=='edit'){
+
+
+                layer.open({
+                    type:2,
+                    title:"更新",
+                    content: ctxPath+"updataCustomer/"+obj.data.id,
+                    area: ['750px', '550px'],
+                    closeBtn:2,
+                    end:function (){
+                        table.reload('table-cus');
+
+                    } ,
+                });
+
+
+            }
+
+
+
+
+        })
+
+        //给添加客户数据按钮绑定事件
+        $("#addCustomer").click(function (){
+            layer.open({
+                type:2,
+                title:"添加客户数据",
+                content: ctxPath+"customerAdd",
+                area: ['750px', '650px'],
+                closeBtn:2,
+                end:function (){
+                    table.reload('table-cus');
+
+                } ,
+            });
+
+
+        })
+
+        table.render({
+            elem:"#table-cus",
+            url: ctxPath+"allCustomer",  //请求数据
+            page:true,
+            limit:15,
+            limits:[15,30,50,100,200,300],
+            cols:[
+                [
+                    {field:'id',
+                        title:'销售合同号',
+                        width:125,
+                        height:80,
+                        sort:true,
+
+                    },
+                    {field:'country',
+                        title:'国家',
+                        width:100,
+                        height:80,
+
+
+                    },
+                    {field:'customer',
+                        title:'客户名字',
+                        width:100,
+                        height:80,
+
+
+                    },
+
+                    {field:'currency',
+                        title:'交易币种',
+                        width:100,
+                        height:80,
+
+
+                    },
+                    {field:'contract',
+                        title:'合同',
+                        width:200,
+                        height:80,
+                        sort:true,
+
+                    },
+                    {field:'send',
+                        title:'发货金额',
+                        width:200,
+                        height:80,
+                        sort:true,
+
+                    },
+                    {field:'paymentCollection',
+                        title:'回款',
+                        width:200,
+                        height:80,
+                        sort:true,
+
+                    },
+                    {
+                        title:'欠款',
+                        width:200,
+                        height:80,
+                        sort:true,
+                        //自定义模板计算欠款
+                        templet:function (d){
+                             var  data = d.paymentCollection - d.contract;
+                            return  data ;
+
+
+                        }
+
+                    },
+
+
+                    {
+                        title:'是否回完',
+                        width:120,
+                        height:80,
+                        sort:true,
+                        //自定义模板表示是否已经回完
+                        templet:function (d){
+                            var  send = d.send;
+                            var pay = d.paymentCollection;
+
+                            return send-pay==0?'是':'否';
+
+
+                        }
+
+                    },
+
+                    {field:'notes',
+                        title:'备注',
+                        width:130,
+                        height:80,
+
+
+                    },
+
+
+                    {
+                        title:'操作',
+                        align:'center',
+                        width:130,
+                        templet:function (){
+                            var str = "<button type=\"button\" class=\"layui-btn  layui-btn-xs\" lay-event='edit'>更新</button>";
+                            str+="<button type=\"button\" class=\"layui-btn  layui-btn-xs  layui-btn-danger\" lay-event='del' >删除</button>";
+                            return  str;
+                        }
+
+                    }
+
+                ]
+            ]
+
+        })
+        // 获取路径   侧边栏添加选中状态
+        function GetUrlRelativePath() {
+            var url = document.location.toString();
+            var arrUrl = url.split("//");
+
+            var start = arrUrl[1].indexOf("/");
+            var relUrl = arrUrl[1].substring(start);// stop省略，截取从start开始到结尾的所有字符
+
+            if (relUrl.indexOf("?") != -1) {
+                relUrl = relUrl.split("?")[0];
+            }
+            return relUrl;
+        }
+
+        /**
+         * 选中菜单默认打开
+         */
+        $(document).ready(function () {
+            var url = GetUrlRelativePath();
+            var patt1 = new RegExp(url);
+            $(document.body).find('a').each(function (i, obj) {
+                var str = $(obj).attr('href');
+                if (patt1.test(str)) {
+                    $(obj).parent().addClass("layui-this");
+                }
+            });
+        });
+
+
+
+    });
+
+
+</script>
+
+</body>
+</html>
