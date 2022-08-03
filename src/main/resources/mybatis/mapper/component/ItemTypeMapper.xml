@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.component.ItemTypeMapper">
+<!--多选框-->
+    <select id="getAllItemType" resultType="com.yujian.financial_client.pojo.component.ItemType">
+
+        select name,value  from Item_type
+
+    </select>
+    <select id="getCount" resultType="int">
+
+        select COUNT(*) from Item_type
+
+    </select>
+<!--前端数据展示-->
+    <select id="getItemTypeData" resultType="com.yujian.financial_client.pojo.component.ItemType" parameterType="com.yujian.financial_client.commo.vo.ItemTypeQuery">
+
+        select name ,price,notes,id from  Item_type
+
+       <include refid="getWhere"></include>
+         limit  #{page},#{limit}
+
+
+    </select>
+    <sql id="getWhere">
+        <where>
+            <if test=" name != null">
+                name like "%" #{name} "%"
+            </if>
+            <if test=" price != 0.0">        <!--  注意类型空值  -->
+                and   price like "%" #{price} "%"
+            </if>
+
+        </where>
+    </sql>
+
+<insert id="addItemType" parameterType="com.yujian.financial_client.pojo.component.ItemType" >
+
+
+
+     insert into Item_type(name,value,price,notes) values (#{name},#{name},#{price},#{notes})
+
+
+</insert>
+
+<delete id="deleteItemType" parameterType="string">
+delete  from    Item_type where  name =#{name}
+
+
+</delete>
+
+<!--    表单回显    -->
+    <select id="getOneItemType" parameterType="string" resultType="com.yujian.financial_client.pojo.component.ItemType">
+
+        select name ,price,notes,id  from  Item_type where name =#{name}
+
+
+    </select>
+
+
+
+
+    <update id="upDataItemType" parameterType="com.yujian.financial_client.pojo.component.ItemType">
+
+
+            update  Item_type set name=#{name},value=#{name},price=#{price},notes=#{notes}  where id=#{id}
+
+
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
