@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<div class="layui-container">
+  <form class="layui-form" method="post" th:object="${contact}">
+    <div class="layui-form-item">
+      <label class="layui-form-label">合同日期</label>
+      <div class="layui-input-block">
+        <input   id="hireDate"  type="text" th:field="*{time}" required="required" lay-verify="required" placeholder="年-月-日" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">国家</label>
+      <div class="layui-input-block">
+        <select th:field="*{country}"  autocomplete="off" >
+          <option value="">选择国家</option>
+          <option th:each="country:${countryList}" th:value="${country.name}" th:text="${country.name}"></option>
+
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">客户名字</label>
+      <div class="layui-input-block">
+        <select th:field="*{customer}"   >
+          <option value="">选择客户</option>
+          <option th:each="customerName:${customerNameList}" th:value="${customerName.name}" th:text="${customerName.name}"></option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">销售合同号</label>
+      <div class="layui-input-block">
+        <input type="text"   th:field="*{contactNo}"    placeholder="请输入销售合同号"  class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">产品名称</label>
+      <div class="layui-input-block">
+        <select  th:field="*{itemName}"  >
+          <option value="">选择产品</option>
+          <option th:each="itemName:${itemNameList}" th:value="${itemName.name}" th:text="${itemName.name}"></option>
+        </select>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">数量</label>
+      <div class="layui-input-block">
+        <input type="text"   th:field="*{count}"  placeholder="请输入数量"  class="layui-input">
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">单价</label>
+      <div class="layui-input-block">
+        <input type="text"   th:field="*{onePrice}"  placeholder="请输入单价"  class="layui-input">
+      </div>
+    </div>
+
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">报价方式</label>
+      <div class="layui-input-block">
+        <select   th:field="*{priceQuote}"  >
+          <option value=""></option>
+          <option value="0"></option>
+          <option value="FOB">FOB</option>
+          <option value="DDP">DDP</option>
+          <option value="EXW">EXW</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">回款币种</label>
+      <div class="layui-input-block">
+        <select  th:field="*{currency}" >
+          <option value=""></option>
+          <option value="0"></option>
+          <option value="人民币￥">人民币￥</option>
+          <option value="美元$">美元$</option>
+        </select>
+      </div>
+    </div>
+    <input id="number"  type="hidden"  th:field="*{id}"     class="layui-input">
+    <div class="layui-form-item">
+      <label class="layui-form-label">备注</label>
+      <div class="layui-input-block">
+        <input type="text"  th:field="*{notes}"    placeholder="请输入备注" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button  id="upDataContract" class="layui-btn" lay-submit lay-filter="upDataContract">点击更新</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </div>
+    </div>
+  </form>
+</div>
+<script src="../layui/layui.js"></script>
+<script th:inline="javascript" >
+
+  //获取contextPath
+  var ctxPath = [[@{/}]];
+
+    layui.use(['form','laydate','layer','jquery'], function(){
+      //绑定日期模块
+      var  laydate=layui.laydate;
+      var  layer  = layui.layer;
+      var  $ = layui.$;
+      var  form =layui.form;
+
+
+      laydate.render({
+        elem: '#hireDate',
+        trigger:'click'
+
+      });
+
+      //监听上方添加按钮点击事件
+      form.on('submit(upDataContract)',function (data){
+
+        //AJAX
+        $.post(ctxPath+"upDataContract",data.field,function (d){
+
+
+          if (d.code===0){
+            //关闭弹出层
+            layer.msg("更新成功",{icon:1,time:800},function () {
+
+              var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+              parent.layer.close(index); //再执行关闭
+            });
+
+          }else {
+            layer.msg("更新失败,"+d.msg,{icon:5,anim:6});
+
+          }
+
+
+        },"json");
+
+        return false; //阻止表单跳转
+
+      });
+
+
+
+    });
+
+
+</script>
+</body>
+</html>
