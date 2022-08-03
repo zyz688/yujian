@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.ContractMapper">
+    <sql id="getContractWhere">
+        <where>
+            <if test=" contactNo != null">
+                contact_no like "%" #{contactNo} "%"
+            </if>
+
+            <if test="startDate != null">
+                <![CDATA[
+          and  time >=#{startDate}
+            ]]>
+            </if>
+            <if test="endDate != null">
+                <![CDATA[
+           and time <= #{endDate}
+
+           ]]>
+            </if>
+            <if test=" country != null">
+                <![CDATA[
+              and  country like "%" #{country} "%"
+               ]]>
+            </if>
+
+
+             <if test=" itemName != null">
+              <![CDATA[
+               and item_name like "%" #{itemName} "%"
+                ]]>
+            </if>
+
+
+        </where>
+    </sql>
+
+    <select id="getAllContracts" parameterType="com.yujian.financial_client.vo.ConQuery" resultType="com.yujian.financial_client.pojo.Contract">
+
+
+            select id, time ,country,customer,contact_no,item_name,count,one_price,price_quote,currency,notes
+            from hetong_table
+            <include refid="getContractWhere"></include>
+
+             limit  #{page},#{limit}
+
+
+    </select>
+
+    <select id="getDataCount" resultType="int">
+
+            select  count(1) from hetong_table
+
+
+
+    </select>
+
+
+    <delete id="delContact" parameterType="long">
+
+
+        delete from hetong_table    where  id=#{id}
+
+
+    </delete>
+
+
+
+
+
+
+<insert id="addContract" parameterType="com.yujian.financial_client.pojo.Contract" >
+    insert  into  hetong_table(time ,country,customer,contact_no,item_name,count,one_price,price_quote,currency,notes) values (#{time},#{country},#{customer},#{contactNo},#{itemName},#{count},#{onePrice},#{priceQuote},#{currency},#{notes})
+
+</insert>
+
+
+
+<update id="updateContract" parameterType="com.yujian.financial_client.pojo.Contract" >
+    update   hetong_table   set  time =#{time},country=#{country},customer=#{customer},contact_no=#{contactNo},item_name=#{itemName},count=#{count},one_price=#{onePrice},price_quote=#{priceQuote},currency=#{currency},notes=#{notes}  where id=#{id}
+
+</update>
+
+<select id="getOneContract"  parameterType="long" resultType="com.yujian.financial_client.pojo.Contract">
+
+    select  id, time ,country,customer,contact_no,item_name,count,one_price,price_quote,currency,notes
+    from hetong_table
+    where id=#{id}
+
+
+
+</select>
+
+
+
+</mapper>
