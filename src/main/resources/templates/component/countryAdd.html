@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="icon" href="/favicon.ico">
+  <!--  <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">-->
+  <link rel="stylesheet" th:href="@{layui/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-container">
+
+  <div style="transform:translateY(38px);margin-right: 30px">
+  <form class="layui-form"  method="post">
+    <div class="layui-form-item">
+      <label class="layui-form-label">国家</label>
+      <div class="layui-input-block">
+        <input type="text" name="name" required  lay-verify="required" placeholder="请输入国家" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button   id="addCountry" class="layui-btn layui-btn-normal" lay-submit lay-filter="addCountry"><i class="layui-icon layui-icon-addition"></i>点击添加</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </div>
+    </div>
+  </form>
+  </div>
+
+</div>
+<script  th:src="@{layui/layui.js}" charset="utf-8"></script>
+<script  type="text/javascript" th:inline="javascript">
+  var ctxPath = [[@{/}]];
+
+  layui.use(['form','layer','jquery'],function(){
+
+    var form = layui.form;
+    var layer  = layui.layer;
+    var  $ = layui.$;
+
+
+
+
+    form.on('submit(addCountry)', function(data){
+
+
+      //AJAX请求
+      $.post(ctxPath+"addCountry",data.field,function (d){
+
+        if (d.code==0){
+          // layer.msg("添加成功");
+          //关闭弹出层
+          layer.msg("添加成功",{icon:6,time:800}, function () {
+
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+          });
+
+
+        }else {
+          layer.msg("添加失败,"+d.msg,{icon:5,anim:6});
+
+        }
+
+
+      },"json");
+
+
+
+
+      return false; //阻止表单跳转
+    });
+
+
+
+
+
+
+  });
+
+
+
+</script>
+</body>
+
+
+</html>
