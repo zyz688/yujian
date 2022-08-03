@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.component.CountryMapper">
+
+<select id="getAllCountry" resultType="com.yujian.financial_client.pojo.component.Country" >
+
+
+        select name,id from country
+
+</select>
+
+
+
+        <select id="getCount" resultType="int">
+
+
+
+            select  count(1) from country
+
+        </select>
+
+
+
+    <delete id="deleteCounty" parameterType="integer">
+
+
+        delete  from  country where  id=#{id}
+
+    </delete>
+    <insert id="addCountry" parameterType="com.yujian.financial_client.pojo.component.Country" >
+
+
+            insert  into  country(name) values (#{name})
+
+
+    </insert>
+
+</mapper>
