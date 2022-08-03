@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>预见科技</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="layui/css/layui.css">
+</head>
+<body>
+
+<div class="layui-layout-admin layui-icon-layout">
+<div th:replace="~{common/toplayui::top}"></div>
+<div th:replace="~{common/leftlayui::left}"></div>
+
+
+  <!--tab标签 右侧区域-->
+  <div class="layui-tab" lay-filter="demo" lay-allowclose="true" style="margin-left: 200px;transform:translateY(38px)">
+
+
+    <div class="layui-tab-content">
+
+
+      <div class="layui-row">
+
+        <div class="layui-col-md11">
+          <form class="layui-form layui-form-pane" action="">
+
+            <div class="layui-inline">
+              <label class="layui-form-label">日期</label>
+              <div class="layui-input-inline" style="width: 120px;">
+                <input type="text" id="startDate" name="startDate" placeholder="开始日期" autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-input-inline" style="width: 120px;">
+                <input type="text" id="endDate" name="endDate" placeholder="结束日期" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">销售合同号</label>
+              <div class="layui-input-inline" style="width: 150px;">
+                <input type="text" id="contactNo" name="contactNo" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">国家</label>
+              <div class="layui-input-inline" style="width: 150px;">
+                <input type="text"  id="country" name="country" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">产品名称</label>
+              <div class="layui-input-inline" style="width: 150px;">
+                <input type="text"  id="itemName" name="itemName" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <button id="search-con" lay-submit lay-filter="search-con" type="button" class="layui-btn  layui-btn-normal">
+                <i class="layui-icon layui-icon-search"></i>
+                搜索</button>
+              <button id="btn-reset" type="reset" class="layui-btn  layui-btn-normal">
+                <i class="layui-icon layui-icon-refresh"></i>
+                清空条件,刷新</button>
+            </div>
+          </form>
+        </div>
+        <div class="layui-col-md1  ">
+          <button  id="addContract"  type="button" class="layui-btn   layui-btn-normal ">
+            <i class="layui-icon layui-icon-addition"></i>添加数据</button>
+        </div>
+
+      </div>
+      <table id="contractTable" lay-filter="contractTable"></table>
+    </div>
+
+
+  </div>
+
+  <!--    <div class="layui-footer">-->
+  <!--        &lt;!&ndash; 底部固定区域 &ndash;&gt;-->
+  <!--    </div>-->
+
+</div>
+<script src="layui/layui.js"></script>
+<!--顶部的script-->
+<div th:replace="~{common/toplayui::scrpt}"></div>
+
+<script type="text/javascript"  th:inline="javascript" >
+  var ctxPath = [[@{/}]];
+
+  layui.use(['form', 'layer', 'jquery','table','util','laydate'], function () {
+    var  table=  layui.table;
+    var  $ = layui.$;
+    var layer =layui.layer;
+    var  laydate = layui.laydate;
+    var  form = layui.form;
+
+    var  util = layui.util;//引入util
+
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#startDate,#endDate', //指定元素
+
+    });
+
+
+
+    //给清空按钮添加点击事件
+    $('#btn-reset').click(function (){
+      table.reload('contractTable',{
+        url: ctxPath+'allContract',
+        where: {
+          contactNo:'',
+          startDate:'',
+          endDate:'',
+          country:'',
+          itemName:'',
+
+        },
+        page:{
+          curr:1
+        },
+
+
+      });
+
+    });
+
+
+
+
+    //监听表格上方查询表单提交
+    form.on('submit(search-con)',function(data){
+
+      //刷新表格
+      table.reload('contractTable',{
+        url:  ctxPath+'allContract',
+        where: { //设定异步数据接口的额外参数，任意设
+          contactNo:data.field.contactNo,
+          startDate:data.field.startDate,
+          endDate:data.field.endDate,
+          country:data.field.country,
+          itemName:data.field.itemName,
+        }
+        ,page: {
+          curr: 1 //重新从第 1 页开始
+        }
+      }); //只重载数据
+      return false;//阻止跳转
+    })
+
+
+
+
+      //回到顶部 固定块
+    util.fixbar({
+      bar1: false,
+      bar2: false
+      , css: { right: 15, bottom: 35}
+      , bgcolor: '##CDC5BF !important;display:block;'
+      , showHeight: 400
+
+    });
+
+
+    //给当前行绑定事件  回调函数形参为当前行内容
+    table.on('tool(contractTable)',function (obj){
+
+      //进行 lay-event 判断是什么操作
+      if (obj.event==='del'){
+        //删除操作
+        layer.confirm('确定删除吗?', {icon:1, title:'提示'}, function(index){
+          //删除逻辑的实现
+
+          obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+          layer.close(index);
+
+          $.getJSON( ctxPath+"deleteContract",{id:obj.data.id},function (d){
+          if (d.code===0){
+            layer.msg("成功删除",{
+              icon: 1,
+              time: 1000 //2秒关闭（如果不配置，默认是3秒）
+            });
+
+          }
+          else{
+            layer.msg("删除失败",{
+              icon: 7,
+              time: 1000 //1秒关闭（如果不配置，默认是3秒）
+            });
+          }
+
+          });
+
+
+        });
+
+
+
+
+      }else   if (obj.event==='edit'){
+
+        layer.open({
+          type:2,
+          title:"更新",
+          content: ctxPath+"upDataContact/"+obj.data.id,
+          area: ['750px', '700px'],
+          closeBtn:2,
+          end:function (){
+            table.reload('contractTable');
+
+          } ,
+        });
+
+
+      }
+
+
+
+
+    })
+
+    //给添加合同数据按钮绑定事件
+    $("#addContract").click(function (){
+      layer.open({
+        type:2,
+        title:"添加客户数据",
+        content:ctxPath+"addContractForm",
+        area: ['800px', '660px'],
+        closeBtn:2,
+        end:function (){
+          table.reload('contractTable');
+
+        } ,
+
+      });
+
+
+    })
+
+    table.render({
+      elem:"#contractTable",
+      url:ctxPath+"allContract", //数据
+      page:true,
+      limit:15,
+      limits:[15,30,50,100,200],
+      cols:[
+        [
+          {field:'time',
+            title:'合同日期',
+            width:105,
+            height:80,
+            sort:true,
+
+          },
+          {field:'country',
+            title:'国家',
+            width:100,
+            height:80,
+
+
+          },
+          {field:'customer',
+            title:'客户名字',
+            width:100,
+            height:80,
+
+
+          },
+
+          {field:'contactNo',
+            title:'销售合同号',
+            height:80,
+            sort:true,
+
+          },
+          {field:'itemName',
+            title:'产品名称',
+            height:80,
+          },
+
+          {
+            title:'单位',
+            height:80,
+            templet:function (){
+              return '个';
+
+            }
+
+          },
+          {field:'count',
+            title:'数量',
+
+            height:80,
+            sort:true,
+
+          },
+          {field:'onePrice',
+            title:'单价(元)',
+
+            height:80,
+            sort:true,
+
+
+          },
+          {
+            title:'金额(元)',
+            height:80,
+            sort:true,
+            templet:function (d){
+               var  number =  d.onePrice * d.count;
+              return   number.toFixed(2);
+            }
+
+          },
+          {field:'priceQuote',
+            title:'报价方式',
+
+            height:80,
+
+
+          },
+          {field:'currency',
+            title:'回款币种',
+
+            height:80,
+
+
+          },
+
+          {field:'notes',
+            title:'备注',
+
+            height:80,
+
+
+          },
+
+
+          {
+            title:'操作',
+            align:'center',
+            templet:function (){
+              var str = "<button type=\"button\" class=\"layui-btn  layui-btn-xs\" lay-event='edit'>编辑</button>";
+              str+="<button type=\"button\" class=\"layui-btn  layui-btn-xs  layui-btn-danger\" lay-event='del' >删除</button>";
+              return  str;
+            }
+
+          }
+
+        ]
+      ]
+
+    })
+    // 获取路径   侧边栏添加选中状态
+    function GetUrlRelativePath() {
+      var url = document.location.toString();
+      var arrUrl = url.split("//");
+
+      var start = arrUrl[1].indexOf("/");
+      var relUrl = arrUrl[1].substring(start);// stop省略，截取从start开始到结尾的所有字符
+
+      if (relUrl.indexOf("?") != -1) {
+        relUrl = relUrl.split("?")[0];
+      }
+      return relUrl;
+    }
+
+    /**
+     * 选中菜单默认打开
+     */
+    $(document).ready(function () {
+      var url = GetUrlRelativePath();
+      var patt1 = new RegExp(url);
+      $(document.body).find('a').each(function (i, obj) {
+        var str = $(obj).attr('href');
+        if (patt1.test(str)) {
+          $(obj).parent().addClass("layui-this");
+        }
+      });
+    });
+
+
+  });
+
+
+</script>
+
+</body>
+</html>
