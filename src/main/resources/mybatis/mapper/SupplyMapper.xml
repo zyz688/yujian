@@ -3,12 +3,80 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yujian.financial_client.mapper.SupplyMapper">
+    <sql id="getSupplyWhere">
+        <where>
+            <if test=" id != null">
+              id like "%" #{id} "%"
+            </if>
+            <if test="startDate != null">
+                <![CDATA[
+          and  time >=#{startDate}
+            ]]>
+            </if>
+            <if test="endDate != null">
+                <![CDATA[
+           and time <= #{endDate}
 
-   <select id="allSupply" resultType="com.yujian.financial_client.pojo.Supply">
+           ]]>
+            </if>
+            <if test="itemType != null">
+                <![CDATA[
+           and item_type like "%" #{itemType} "%"
 
-            select  * from financial_client.gonghuo_table
+           ]]>
+            </if>
+        </where>
+    </sql>
+   <select id="allSupply" resultType="com.yujian.financial_client.pojo.Supply" parameterType="com.yujian.financial_client.vo.SupQuery">
+
+            select time,type,id,item_type,pay_amount,procurement,invoice_amount,number,notes from gonghuo_table
+
+            <include refid="getSupplyWhere"></include>
+
+            limit  #{page},#{limit}
 
    </select>
+
+    <delete id="deleteSupply" parameterType="string">
+
+        delete from gonghuo_table where  id = #{id}
+
+    </delete>
+    <insert id="addSupply" parameterType="com.yujian.financial_client.pojo.Supply">
+
+
+   insert into gonghuo_table(time, type, id, item_type, pay_amount, procurement, invoice_amount,number,notes) values (#{time},#{type},#{id},#{itemType},#{payAmount},#{procurement},#{invoiceAmount},#{number},#{notes})
+
+
+
+    </insert>
+    <select id="getDataCount" resultType="int">
+        select count(1) from  gonghuo_table
+
+    </select>
+
+    <select id="getOneSupply" parameterType="string" resultType="com.yujian.financial_client.pojo.Supply">
+
+        select time,type,id,item_type,pay_amount,procurement,invoice_amount,number,notes from   gonghuo_table where  id=#{id}
+
+
+
+
+    </select>
+    <update id="updataSupply" parameterType="com.yujian.financial_client.pojo.Supply">
+
+
+   update  gonghuo_table set  time =#{time},type=#{type},id=#{id},item_type=#{itemType},pay_amount=#{payAmount},procurement=#{procurement},invoice_amount=#{invoiceAmount},notes=#{notes} where number=#{number}
+
+
+
+
+    </update>
+    <select id="getItemTypeValue" resultType="string" >
+
+    select  item_type from gonghuo_table where  id=#{id}
+
+    </select>
 
 
 
