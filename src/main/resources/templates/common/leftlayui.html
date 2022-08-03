@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:fragment="left">
+
+
+    <div class="layui-side layui-bg-black">
+
+        <div class="layui-side-scroll" >
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree site-demo-nav" >
+
+
+                <li class="layui-nav-item layui-nav-itemed  ">
+                    <a class="" href="javascript:;">财务管理数据表</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/supplyTable}"
+                               class="site-demo-active" >供货商往来账务</a></dd>
+                        <dd><a class="site-demo-active">物料采购</a></dd>
+                    </dl>
+                </li>
+
+
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">客户往来账务</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/customerTable}"
+                               class="site-demo-active" >客户往来账务管理</a></dd>
+                        <dd><a  th:href="@{/contractTable}"
+                                class="site-demo-active" data-type="tabAdd">合同</a></dd>
+                        <dd><a
+                                class="site-demo-active" data-type="tabAdd">发货</a></dd>
+                        <dd><a class="site-demo-active" data-type="tabAdd">回款</a></dd>
+                        <dd><a class="site-demo-active" data-type="tabAdd">零星销售</a></dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">组件管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a  th:href="@{/itemTypeTable}"
+                                class="site-demo-active" data-type="tabAdd">物料类型 & 类别</a></dd>
+                        <dd><a  th:href="@{/country}"
+                                class="site-demo-active" data-type="tabAdd">国家 & 客户名字 </a></dd>
+                        <dd><a th:href="@{/ItemName}"
+                                class="site-demo-active" data-type="tabAdd">产品名称管理</a></dd>
+
+                    </dl>
+                </li>
+                <li class="layui-nav-item" style="height: 30px; text-align: center"></li>
+                <span class="layui-nav-bar" style="top: 375px; height: 0px; opacity: 0;"></span>
+            </ul>
+
+
+        </div>
+    </div>
+
+
+
+
+</nav>
+
+
+
+
+
+
+</body>
+</html>
