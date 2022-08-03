@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>预见科技</title>
+
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="layui/css/layui.css">
+
+</head>
+<body>
+<div class="layui-container">
+    <form class="layui-form"  method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">日期</label>
+            <div class="layui-input-block">
+                <input   id="hireDate"  type="text" name="time" required  lay-verify="required" placeholder="年-月-日" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类别</label>
+            <div class="layui-input-block">
+                <select name="type" lay-verify="required">
+                    <option value="">请选择</option>
+                    <option th:each="type:${typeList}" th:value="${type.type}"><span th:text="${type.type}" ></span></option>
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">单号</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" required  lay-verify="required" autocomplete="off" placeholder="请输入单号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">物料类型</label>
+            <div class="layui-input-block">
+<!--                <select name="itemType" >-->
+<!--                    <option value="">请选择</option>-->
+<!--                    <option th:each="itemType:${itemTypeList}" th:value="${itemType.itemType}"><span th:text="${itemType.itemType}" ></span></option>-->
+
+<!--                </select>-->
+                <div id="sup-form" ></div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">付款金额(元)</label>
+            <div class="layui-input-block">
+                <input type="text" name="payAmount"   lay-verify="required"  autocomplete="off" placeholder="请输入付款金额(空请输0)"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">采购金额(元)</label>
+            <div class="layui-input-block">
+                <input  id="caigou" type="text" name="procurement"   lay-verify="required"  autocomplete="off" placeholder="请输入采购金额,已经实现自动计算功能(*^_^*)" class="layui-input" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开票金额(元)</label>
+            <div class="layui-input-block">
+                <input type="text" name="invoiceAmount"   lay-verify="required"  autocomplete="off"  placeholder="请输入开票金额(空请输0)"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" name="notes"   placeholder="请输入备注"  class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button   id="addSupply" class="layui-btn  " lay-submit lay-filter="addSupply"><i class="layui-icon layui-icon-addition"></i>点击添加</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="layui/layui.js"></script>
+<script src="dist/xm-select.js"></script>
+<script th:inline="javascript">
+
+
+    var ctxPath = [[@{/}]];
+
+
+
+
+    //Demo
+    layui.use(['form','laydate','layer','jquery'], function(){
+        //绑定日期模块
+        var  laydate=layui.laydate;
+        var  layer  = layui.layer;
+        var  $ = layui.$;
+        var  form = layui.form;
+
+        var demo1 = xmSelect.render({     //物料类型多选
+            // 这里绑定css选择器
+            el: '#sup-form',
+            autoRow: true,
+            filterable: true,
+            tips: '可以搜索,添加并且可以加数量(*^_^*)',
+            name: 'itemType',
+            theme: {
+                color: '#1cbbb4',
+            },
+            toolbar: {
+                show: true,
+                list: [ 'ALL', 'CLEAR', 'REVERSE' ]
+            },
+            // 渲染的数据
+            data: [
+
+                // {name: '水果', value: '水果'},
+                // {name: '蔬菜', value: '蔬菜'},
+                // {name: '桌子', value: 3},
+                // {name: '北京', value: 4},
+            ],
+            create: function(val, arr){
+                //返回一个创建成功的对象, val是搜索的数据, arr是搜索后的当前页面数据
+                return {
+                    name:  val,
+                    value: val
+                }
+            }
+        })
+
+        $.getJSON(ctxPath+"AllItemType",function (d){       //AJAX 后台获得所有的物料类型
+
+
+            demo1.update({
+                data: d,
+                autoRow: true,
+            })
+
+        });
+        //时间日期模块绑定
+        laydate.render({
+            elem: '#hireDate',
+            trigger:'click'
+
+        });
+        //实现采购输入框自动计算的功能
+        $("#caigou").blur(function () {
+          var  caigou = $("#caigou").val();
+          var  caigou2 = eval(caigou.replace("=",""));
+          $("#caigou").val(caigou2.toFixed(2));
+
+        });
+
+
+
+        form.on('submit(addSupply)',function(data){
+
+            //AJAX请求
+            $.post(ctxPath+"addSupply",data.field,function (d){
+                // console.log(">>>>>",d);
+
+                if (d.code==0){
+                    // layer.msg("添加成功");
+                    //关闭弹出层
+                    layer.msg("添加成功",{icon:1,time:800}, function () {
+
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+
+
+                }else {
+                    layer.msg("添加失败,"+d.msg,{icon:5,anim:6});
+
+                }
+
+
+            },"json");
+
+
+
+
+            return false; //阻止表单跳转
+        });
+
+
+
+    });
+</script>
+</body>
+
+</html>
