@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.CustomerMapper">
+    <sql id="getCustomerWhere">
+        <where>
+            <if test=" id != null">
+                id like "%" #{id} "%"
+            </if>
+
+            <if test="country != null">
+                <![CDATA[
+           and country like "%" #{country} "%"
+
+           ]]>
+            </if>
+            <if test="customer != null">
+                <![CDATA[
+           and customer like "%" #{customer} "%"
+
+           ]]>
+            </if>
+        </where>
+    </sql>
+    <select id="allCustomer" resultType="com.yujian.financial_client.pojo.Customer" parameterType="com.yujian.financial_client.vo.CusQuery">
+
+        select id,country,customer,currency,contract,send,payment_collection,notes
+          from kehuwanglai_table
+        <include refid="getCustomerWhere"></include>
+
+        limit  #{page},#{limit}
+
+    </select>
+
+    <select id="getCustomer" resultType="com.yujian.financial_client.pojo.Customer"  parameterType="string">
+
+                select id,country,customer,currency,contract,send,payment_collection,notes from  kehuwanglai_table where id=#{id}
+
+
+    </select>
+
+    <select id="getDataCount" resultType="int">
+        select count(1) from  kehuwanglai_table
+
+    </select>
+
+    <insert id="addCustomer" parameterType="com.yujian.financial_client.pojo.Customer">
+
+
+        insert into kehuwanglai_table(id,country,customer,currency,contract,send,payment_collection,notes) values (#{id},#{country},#{customer},#{currency},#{contract},#{send},#{paymentCollection},#{notes})
+
+
+
+
+    </insert>
+   <delete id="deleteCustomer" parameterType="string">
+
+        delete from kehuwanglai_table where  id = #{id}
+
+
+   </delete>
+
+</mapper>
