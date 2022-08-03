@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.component.TypeMapper">
+
+    <select id="getAllType" resultType="com.yujian.financial_client.pojo.component.Type">
+
+            select  type,id from type
+
+    </select>
+
+    <delete id="deleteType" parameterType="integer">
+
+            delete from  type  where id=#{id}
+
+    </delete>
+
+
+<insert id="typeAdd" parameterType="com.yujian.financial_client.pojo.component.Type">
+
+
+   insert into   type(type) values (#{type})
+
+</insert>
+
+</mapper>
