@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yujian.financial_client.mapper.component.ItemNameMapper">
+
+    <select id="getAllItemName" resultType="com.yujian.financial_client.pojo.component.ItemName" >
+
+
+        select name,id from item_name
+
+    </select>
+
+
+
+    <select id="getCount" resultType="int">
+
+
+
+        select  count(1) from item_name
+
+    </select>
+
+
+
+    <delete id="deleteItemName" parameterType="int">
+
+
+        delete  from  item_name where  id=#{id}
+
+    </delete>
+    <insert id="addItemName" parameterType="com.yujian.financial_client.pojo.component.ItemName" >
+
+
+        insert  into  item_name(name) values (#{name})
+
+
+    </insert>
+
+</mapper>
