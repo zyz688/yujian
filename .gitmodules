@@ -1,0 +1,4 @@
+[submodule "src/main/resources/static/dist"]
+	url  = https://gitee.com/zyz688/caiwu
+	path = src/main/resources/static/dist
+
