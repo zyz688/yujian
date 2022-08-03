@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body >
+<nav th:fragment="top">
+
+
+
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-fluid">
+                <div class="layui-logo">
+                    <a th:href="@{/main}" style="color: #009688" title="去主页"><i class="layui-icon  layui-icon-home "></i>珠海预见科技</a>
+                </div>
+            </div>
+
+            <div class="layui-row layui-layout-right">
+                <div>
+                    <ul class="layui-nav ">
+                        <li class="layui-nav-item ">
+                            <i class="layui-icon layui-icon-search">物料搜索</i>
+                            <input  id="itemType" type="text" placeholder="找物料"  autocomplete="off" style="width:280px;height: 28px  ;background-color: #4F4F4F;border-left: 0;border-right: 0;border-top: 0;   border-bottom: 0;">
+                        </li>
+                        <li class="layui-nav-item">
+                            <a href="javascript:;"><i class="layui-icon  layui-icon-user"> </i><span
+                                    th:text="${session.loginUser}"></span></a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料"
+                                       data-icon="fa fa-gears">基本资料</a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" layuimini-content-href="page/user-password.html"
+                                       data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                                </dd>
+                                <dd>
+                                    <hr>
+                                </dd>
+                                <dd>
+                                    <a  th:href="@{/loginOut}" onclick="if(confirm('确认退出吗？')==false)return false;">
+                                        <div>
+                                            <button type="button"
+                                                    class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger"><i
+                                                    class="layui-icon  layui-icon-logout"></i>退出
+                                            </button>
+                                        </div>
+                                    </a>
+                                </dd>
+                            </dl>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+<div th:fragment="scrpt">
+    <!-- 注意js 不能重复引入   -->
+    <script src="dist/yutons_sug.js"></script>
+    <script th:inline="javascript">
+
+        //获取contextPath
+        var ctxPath = [[@{/}]];
+
+
+            console.log("66666>>>",ctxPath),
+
+        //引入自定义插件
+        layui.config({
+            base: 'dist/' //设置自定义插件路径:根据实际路径进行设置
+        }).use(['yutons_sug'], function() {
+            //创建yutons_sug搜索框提示插件||输入框提示插件实例
+            var yutons_sug = layui.yutons_sug;
+
+
+            //初始化姓名输入提示框
+            yutons_sug.render({
+                id: "itemType", //设置容器唯一id
+                height: "167",
+                cols: [
+                    [{
+                        field: 'name',
+                        title: '物料类型'
+                    }, {
+                        field: 'price',
+                        title: '价格(元)'
+                    }, {
+                        field: 'notes',
+                        title: '备注'
+                    }]
+                ], //设置表头
+                params: [
+                    {
+                        name: 'name',
+                        field: 'name'
+                    }, {
+                        name: 'price',
+                        field: 'price'
+                    }, {
+                        name: 'notes',
+                        field: 'notes'
+                    }],//设置字段映射，适用于输入一个字段，回显多个字段
+                type: 'sugTable', //设置输入框提示类型：sug-下拉框，sugTable-下拉表格
+                url: ctxPath+"getItemTypeData"  + "?name="    //设置异步数据接口,url为必填项,params为字段名
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        } );
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+</div>
+</body>
+</html>
